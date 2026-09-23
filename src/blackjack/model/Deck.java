@@ -21,11 +21,15 @@ public class Deck {
         return cards.size();
     }
 
-    public Card getCard(int posicao){
-        return cards.get(posicao);
+    public Card getCard(){
+        return cards.get(0);
     }
 
     public void shuffle(){
         Collections.shuffle(cards);
+    }
+
+    public Card draw(){
+        return cards.remove(0);
     }
 }
