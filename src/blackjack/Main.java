@@ -1,19 +1,12 @@
 package blackjack;
 
-import blackjack.model.*;
+import blackjack.game.*;
 
 public class Main{
     public static void main(String[] args) {
-        Deck deck = new Deck();
+        Game game = new Game();
 
-        Hand hand = new Hand();
-        hand.addCard(new Card(Rank.ACE, Suit.SPADES));
-        hand.addCard(new Card(Rank.ACE, Suit.HEARTS));
-        hand.addCard(new Card(Rank.KING, Suit.HEARTS));
-
-        System.out.println(hand.getScore());
-        System.out.println(hand.isBust());
-
-
+        game.playRound();
+        
     }
 }

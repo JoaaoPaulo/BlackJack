@@ -25,7 +25,7 @@ public class Hand {
         }
 
         return total;
-    }
+    } 
 
     public boolean isBust(){
         return getScore()>21;
