@@ -12,14 +12,23 @@ public class Hand {
 
     public int getScore(){
         int total = 0;
+        int aces = 0;
         for (Card card : cards){
             total += card.getRank().getPoints();
+
+            if (card.getRank() == Rank.ACE){aces++;}
         }
+
+        while (aces > 0 && total>21){
+            aces--;
+            total-=10;
+        }
+
         return total;
     }
 
     public boolean isBust(){
-        return(getScore()>21);
+        return getScore()>21;
     }
 
     @Override 
