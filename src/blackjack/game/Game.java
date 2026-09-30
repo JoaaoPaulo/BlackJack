@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import blackjack.model.*;
+import blackjack.ui.CardRenderer;
 
 public class Game {
     private Scanner sc = new Scanner(System.in);
@@ -36,7 +37,8 @@ public class Game {
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
     
-        System.out.println("\nDealer: [" + dealer.getFirstCard() + ", ??]");
+      
+        CardRenderer.printHand(dealer);
         playerTurn(deck, player);
         if (!player.isBust()){
             dealerTurn(deck, dealer);

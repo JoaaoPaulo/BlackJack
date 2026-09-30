@@ -31,6 +31,10 @@ public class Hand {
         return cards.get(0);
     }
 
+    public List<Card> getCards(){
+        return List.copyOf(cards);
+    }
+
     public boolean isBust(){
         return getScore()>21;
     }
