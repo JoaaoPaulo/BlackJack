@@ -35,7 +35,7 @@ public class Game {
         player.addCard(deck.draw());
         dealer.addCard(deck.draw());
     
-        System.out.println("\nDealer: " + dealer + "- " + dealer.getScore());
+        System.out.println("\nDealer: [" + dealer.getFirstCard() + ", ??]");
         playerTurn(deck, player);
         if (!player.isBust()){
             dealerTurn(deck, dealer);

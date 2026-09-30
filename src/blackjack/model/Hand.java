@@ -27,6 +27,10 @@ public class Hand {
         return total;
     } 
 
+    public Card getFirstCard(){
+        return cards.get(0);
+    }
+
     public boolean isBust(){
         return getScore()>21;
     }
