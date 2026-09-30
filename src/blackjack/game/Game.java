@@ -1,5 +1,6 @@
 package blackjack.game;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import blackjack.model.*;
@@ -59,13 +60,7 @@ public class Game {
         int option = 1;
         while(option==1 && !player.isBust()){
             System.out.println("Player: " + player + "- " + player.getScore());
-            System.out.println("1 - Hit");
-            System.out.println("2 - Stand");
-            option = sc.nextInt();
-            while(option!=1 && option!=2){
-                System.out.println("Invalid option. Please choose 1 or 2.");
-                option = sc.nextInt();
-            }
+            option = readOption();
 
             if(option==1){
                 hit(deck, player);
@@ -82,6 +77,24 @@ public class Game {
 
     public void hit(Deck deck, Hand player){
         player.addCard(deck.draw());
+    }
+
+    private int readOption() {
+        while (true) {
+            System.out.println("1 - Hit");
+            System.out.println("2 - Stand");
+            try {
+                int option = sc.nextInt();
+                if (option == 1 || option == 2) {
+                    return option;
+                } else {
+                    System.out.println("Invalid option. Please choose 1 or 2.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+            }
+        }
     }
 
 }
