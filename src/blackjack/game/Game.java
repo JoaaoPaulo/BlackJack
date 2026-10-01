@@ -2,15 +2,14 @@ package blackjack.game;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import blackjack.model.*;
-import blackjack.ui.CardRenderer;
+import blackjack.ui.*;
 
 public class Game {
-    private Scanner sc = new Scanner(System.in);
+    private Scanner sc = new Scanner(System.in);  
 
     public RoundResult determineResult (Hand player, Hand dealer){
-
+        
         if (player.isBust()) {
             return RoundResult.DEALER_WINS;
         } else if(dealer.isBust()){
@@ -22,10 +21,11 @@ public class Game {
         } else{
             return RoundResult.PUSH;
         }
-
+        
     }
-
+    
     public void playRound(){
+        TableRenderer.showTitle();
         Deck deck = new Deck();
         deck.shuffle();
     
@@ -33,15 +33,18 @@ public class Game {
         Hand dealer = new Hand();
     
         player.addCard(deck.draw());
+        TableRenderer.showTable(dealer, player, true);
         dealer.addCard(deck.draw());
+        TableRenderer.showTable(dealer, player, true);
         player.addCard(deck.draw());
+        TableRenderer.showTable(dealer, player, true);
         dealer.addCard(deck.draw());
+        TableRenderer.showTable(dealer, player, true);
+
     
-      
-        CardRenderer.printHand(dealer);
-        playerTurn(deck, player);
+        playerTurn(deck, player, dealer);
         if (!player.isBust()){
-            dealerTurn(deck, dealer);
+            dealerTurn(deck, dealer, player);
         }
 
         System.out.println("\nDealer: " + dealer + "- " + dealer.getScore());
@@ -58,22 +61,25 @@ public class Game {
         } while (option.equalsIgnoreCase("y"));
     }
 
-    public void playerTurn(Deck deck, Hand player){
+    public void playerTurn(Deck deck, Hand player, Hand dealer){
         int option = 1;
         while(option==1 && !player.isBust()){
-            System.out.println("Player: " + player + "- " + player.getScore());
+            //CardRenderer.printHand(player, false);
+            //System.out.println("Player: " +  player.getScore());
             option = readOption();
 
             if(option==1){
                 hit(deck, player);
+                TableRenderer.showTable(dealer, player, true);
             }
         }
     }
 
-    public void dealerTurn(Deck deck, Hand dealer){
+    public void dealerTurn(Deck deck, Hand dealer, Hand player){
+        TableRenderer.showTable(dealer, player, false);
         while(dealer.getScore()<17){
             dealer.addCard(deck.draw());
-            System.out.println("\nDealer: " + dealer + "- " + dealer.getScore());
+            TableRenderer.showTable(dealer, player, false);
         }
     }
 
@@ -98,5 +104,4 @@ public class Game {
             }
         }
     }
-
 }
