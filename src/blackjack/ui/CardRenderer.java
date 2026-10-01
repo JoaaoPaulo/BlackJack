@@ -207,21 +207,31 @@ public class CardRenderer {
         return cardBack;
     }
 
-    public static void printHand(Hand hand){
+    public static void printHand(Hand hand, boolean hideCard){
         String[] cardLines = new String[9];
+        String[] cardRender;
+        int count = 0;
+
         for (int i = 0; i < 9; i++){
             cardLines[i] = "";
         }
 
         for (Card card : hand.getCards()){
-            String[] cardRender = render(card);
-            for (int i = 0; i < 9; i++){
-                cardLines[i] += cardRender[i] + " ";
-            }
-        }
+                if(!hideCard || count != 1){
+                    cardRender = render(card);
+                } else {
+                    cardRender = renderBack();
+                }
 
-        for (String line : cardLines){
-            System.out.println(line);
+                for (int i = 0; i < 9; i++){
+                    cardLines[i] += cardRender[i] + " ";
+                }
+
+                count++;
+                
         }
+            for (String line : cardLines){
+                System.out.println(line);
+            }
     }
 }
