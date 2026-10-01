@@ -1,6 +1,5 @@
 package blackjack.ui;
-import blackjack.model.Hand;
-import blackjack.game.Game;
+import blackjack.model.*;
 
 public class TableRenderer {
     public static void clearScreen() {
@@ -8,14 +7,16 @@ public class TableRenderer {
         System.out.flush();
     }
 
-    public static void showTable(Hand dealer, Hand player, boolean hideDealerCard) {
+    public static void showTable(Hand dealer, Hand playerHand, Player player, boolean hideDealerCard) {
         clearScreen();
         System.out.print("\n\n");
         System.out.println("-------DEALER'S HAND-------");
         CardRenderer.printHand(dealer, hideDealerCard);
-        System.out.print("\n\n\n\n");
+        System.out.print("\n\n\n");
         System.out.println("-------PLAYER'S HAND-------");
-        CardRenderer.printHand(player, false);
+        CardRenderer.printHand(playerHand, false);
+        System.out.println("Balance: " + player.getBalance());
+        System.out.println("Bet: " + player.getBetAmount());
         pause(1000);
     }
 
@@ -32,13 +33,22 @@ public class TableRenderer {
     }
 
     public static void showTitle(){
-        TableRenderer.clearScreen();
-        System.out.println("┌──────────────────────────────┐");
-        System.out.println("│                              │");
-        System.out.println("│-----------BLACKJACK----------│");
-        System.out.println("│                              │");
-        System.out.println("└──────────────────────────────┘");
-        pause(1500);
         clearScreen();
+        System.out.println("""
+                                     _______   __                      __           _____                      __       
+                                    /       \\ /  |                    /  |         /     |                    /  |      
+                                    $$$$$$$  |$$ |  ______    _______ $$ |   __    $$$$$ |  ______    _______ $$ |   __ 
+                                    $$ |__$$ |$$ | /      \\  /       |$$ |  /  |      $$ | /      \\  /       |$$ |  /  |
+                                    $$    $$< $$ | $$$$$$  |/$$$$$$$/ $$ |_/$$/  __   $$ | $$$$$$  |/$$$$$$$/ $$ |_/$$/ 
+                                    $$$$$$$  |$$ | /    $$ |$$ |      $$   $$<  /  |  $$ | /    $$ |$$ |      $$   $$<  
+                                    $$ |__$$ |$$ |/$$$$$$$ |$$ \\_____ $$$$$$  \\ $$ \\__$$ |/$$$$$$$ |$$ \\_____ $$$$$$  \\ 
+                                    $$    $$/ $$ |$$    $$ |$$       |$$ | $$  |$$    $$/ $$    $$ |$$       |$$ | $$  |
+                                    $$$$$$$/  $$/  $$$$$$$/  $$$$$$$/ $$/   $$/  $$$$$$/   $$$$$$$/  $$$$$$$/ $$/   $$/ 
+
+                """);
+        pause(2500);
+        clearScreen();
+        
     }
 }
+

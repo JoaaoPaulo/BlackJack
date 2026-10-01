@@ -6,22 +6,31 @@ import blackjack.model.*;
 import blackjack.ui.*;
 
 public class Game {
-    private Scanner sc = new Scanner(System.in);  
+    private Scanner sc = new Scanner(System.in);
+    private Player player = new Player(10000);
 
-    public RoundResult determineResult (Hand player, Hand dealer){
+    public RoundResult determineResult (Hand playerHand, Hand dealer, Player player){
         
-        if (player.isBust()) {
+        if (playerHand.isBust()) {
             return RoundResult.DEALER_WINS;
         } else if(dealer.isBust()){
             return RoundResult.PLAYER_WINS;
-        } else if(player.getScore()>dealer.getScore()){
+        } else if(playerHand.getScore()>dealer.getScore()){
             return RoundResult.PLAYER_WINS;
-        } else if(dealer.getScore()>player.getScore()){
+        } else if(dealer.getScore()>playerHand.getScore()){
             return RoundResult.DEALER_WINS;
         } else{
             return RoundResult.PUSH;
         }
         
+    }
+
+    public void pay(RoundResult result, Player player){
+        if(result.equals(RoundResult.PLAYER_WINS)){
+            player.win();
+        } else if(result.equals(RoundResult.PUSH)){
+            player.bet(- player.getBetAmount());
+        }
     }
     
     public void playRound(){
@@ -29,27 +38,33 @@ public class Game {
         Deck deck = new Deck();
         deck.shuffle();
     
-        Hand player = new Hand();
+        Hand playerHand = new Hand();
         Hand dealer = new Hand();
     
-        player.addCard(deck.draw());
-        TableRenderer.showTable(dealer, player, true);
+        System.out.println("Your current balance: " + player.getBalance());
+        player.bet(readBetAmount(player));
+
+        playerHand.addCard(deck.draw());
+        TableRenderer.showTable(dealer, playerHand, player, true);
         dealer.addCard(deck.draw());
-        TableRenderer.showTable(dealer, player, true);
-        player.addCard(deck.draw());
-        TableRenderer.showTable(dealer, player, true);
+        TableRenderer.showTable(dealer, playerHand, player, true);
+        playerHand.addCard(deck.draw());
+        TableRenderer.showTable(dealer, playerHand, player, true);
         dealer.addCard(deck.draw());
-        TableRenderer.showTable(dealer, player, true);
+        TableRenderer.showTable(dealer, playerHand, player, true);
 
     
-        playerTurn(deck, player, dealer);
-        if (!player.isBust()){
-            dealerTurn(deck, dealer, player);
+        playerTurn(deck, playerHand, dealer, player);
+        if (!playerHand.isBust()){
+            dealerTurn(deck, dealer, playerHand, player);
+        } else {
+            TableRenderer.showTable(dealer, playerHand, player, false);
         }
 
-        System.out.println("\nDealer: " + dealer + "- " + dealer.getScore());
-        System.out.println("Player: " + player + "- " + player.getScore());
-        System.out.println(determineResult(player, dealer));
+
+        System.out.println("\nDealer: " + dealer.getScore());
+        System.out.println("Player: " + playerHand.getScore());
+        System.out.println(determineResult(playerHand, dealer, player));
     }
 
     public void playGame(){
@@ -61,25 +76,23 @@ public class Game {
         } while (option.equalsIgnoreCase("y"));
     }
 
-    public void playerTurn(Deck deck, Hand player, Hand dealer){
+    public void playerTurn(Deck deck, Hand playerHand, Hand dealer, Player player){
         int option = 1;
-        while(option==1 && !player.isBust()){
-            //CardRenderer.printHand(player, false);
-            //System.out.println("Player: " +  player.getScore());
+        while(option==1 && !playerHand.isBust()){
             option = readOption();
 
             if(option==1){
-                hit(deck, player);
-                TableRenderer.showTable(dealer, player, true);
+                hit(deck, playerHand);
+                TableRenderer.showTable(dealer, playerHand, player, true);
             }
         }
     }
 
-    public void dealerTurn(Deck deck, Hand dealer, Hand player){
-        TableRenderer.showTable(dealer, player, false);
+    public void dealerTurn(Deck deck, Hand dealer, Hand playerHand, Player player){
+        TableRenderer.showTable(dealer, playerHand, player, false);
         while(dealer.getScore()<17){
             dealer.addCard(deck.draw());
-            TableRenderer.showTable(dealer, player, false);
+            TableRenderer.showTable(dealer, playerHand, player, false);
         }
     }
 
@@ -104,4 +117,23 @@ public class Game {
             }
         }
     }
+
+    private int readBetAmount(Player player) {
+        while (true) {
+            System.out.print("Enter your bet amount: ");
+            try {
+                int betAmount = sc.nextInt();
+                if (betAmount > 0 && betAmount <= player.getBalance()) {
+                    return betAmount;
+                } else {
+                    System.out.println("Invalid bet amount. Please enter a positive number not exceeding your balance.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                sc.nextLine();
+            }
+        }
+    }
+
+    
 }
