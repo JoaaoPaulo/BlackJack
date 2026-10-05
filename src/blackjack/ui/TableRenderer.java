@@ -1,10 +1,16 @@
 package blackjack.ui;
+import java.io.IOException;
+
 import blackjack.model.*;
 
 public class TableRenderer {
     public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        try {
+            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+        } catch (IOException | InterruptedException e) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
     }
 
     public static void showTable(Hand dealer, Hand playerHand, Player player, boolean hideDealerCard) {

@@ -65,6 +65,7 @@ public class Game {
         System.out.println("\nDealer: " + dealer.getScore());
         System.out.println("Player: " + playerHand.getScore());
         System.out.println(determineResult(playerHand, dealer, player));
+        pay(determineResult(playerHand, dealer, player), player);
     }
 
     public void playGame(){
